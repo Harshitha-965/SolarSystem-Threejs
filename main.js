@@ -12,16 +12,29 @@ const renderer = new THREE.WebGLRenderer({
   canvas: document.getElementById("solarCanvas"),
   antialias: true
 });
+renderer.physicallyCorrectLights = true;
+
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; // for smooth movement
+controls.dampingFactor = 0.05;
+controls.enablePan = true;     // allow panning
+controls.enableZoom = true;    // allow zooming
+controls.rotateSpeed = 0.8;
+controls.zoomSpeed = 1;
+controls.panSpeed = 0.5;
 // === Lights ===
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.05);
 scene.add(ambientLight);
 
-const sunLight = new THREE.PointLight(0xffaa00, 2.5, 100);
+const sunLight = new THREE.PointLight(0xfff2a1, 800, 100);
 sunLight.position.set(0, 0, 0);
 scene.add(sunLight);
+
+const lightHelper = new THREE.PointLightHelper(sunLight, 2);
+scene.add(lightHelper);
 
 // === Texture Loader ===
 const loader = new THREE.TextureLoader();
@@ -29,7 +42,8 @@ const sunTexture = loader.load("textures/sun.jpg");
 
 // === Realistic Sun Sphere ===
 const sunGeometry = new THREE.SphereGeometry(4, 64, 64);
-const sunMaterial = new THREE.MeshBasicMaterial({ map: sunTexture });
+const sunMaterial = new THREE.MeshBasicMaterial({ map: sunTexture, emissive: 0xffff00,
+  emissiveIntensity: 10 });
 const sun = new THREE.Mesh(sunGeometry, sunMaterial);
 sun.position.set(0, 0, 0);
 scene.add(sun);
@@ -45,7 +59,7 @@ const mercuryMaterial = new THREE.MeshStandardMaterial({
 
 // Mercury mesh
 const mercury = new THREE.Mesh(mercuryGeometry, mercuryMaterial);
-mercury.position.set(6, 0, 0);  // closer to sun than Earth (Earth is at 12)
+mercury.position.set(9, 0, 0);  // closer to sun than Earth (Earth is at 12)
 scene.add(mercury);
 
 //Venus
@@ -53,7 +67,7 @@ const venusTexture = loader.load('textures/venus.jpg');
 const venusGeometry = new THREE.SphereGeometry(1.5, 64, 64);
 const venusMaterial = new THREE.MeshStandardMaterial({ map: venusTexture });
 const venus = new THREE.Mesh(venusGeometry, venusMaterial);
-venus.position.set(8.5, 0, 0);
+venus.position.set(12.5, 0, 0);
 scene.add(venus);
 
 // Load Earth texture (day map)
@@ -67,7 +81,7 @@ const earthMaterial = new THREE.MeshStandardMaterial({
 
 // Earth mesh
 const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-earth.position.set(11, 0, 0);
+earth.position.set(16.5, 0, 0);
 scene.add(earth);
 
 //Mars
@@ -75,7 +89,7 @@ const marsTexture = loader.load('textures/mars.jpg');
 const marsGeometry = new THREE.SphereGeometry(1.2, 64, 64);
 const marsMaterial = new THREE.MeshStandardMaterial({ map: marsTexture });
 const mars = new THREE.Mesh(marsGeometry, marsMaterial);
-mars.position.set(14, 0, 0);
+mars.position.set(21, 0, 0);
 scene.add(mars);
 
 //Jupiter
@@ -83,7 +97,7 @@ const jupiterTexture = loader.load('textures/jupiter.jpg');
 const jupiterGeometry = new THREE.SphereGeometry(3.5, 64, 64);
 const jupiterMaterial = new THREE.MeshStandardMaterial({ map: jupiterTexture });
 const jupiter = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
-jupiter.position.set(20, 0, 0);
+jupiter.position.set(30, 0, 0);
 scene.add(jupiter);
 
 //Saturn
@@ -91,7 +105,7 @@ const saturnTexture = loader.load('textures/saturn.jpg');
 const saturnGeometry = new THREE.SphereGeometry(3, 64, 64);
 const saturnMaterial = new THREE.MeshStandardMaterial({ map: saturnTexture });
 const saturn = new THREE.Mesh(saturnGeometry, saturnMaterial);
-saturn.position.set(26, 0, 0);
+saturn.position.set(39, 0, 0);
 scene.add(saturn);
 
 // Saturn rings texture (put in your textures folder)
@@ -121,7 +135,7 @@ const uranusTexture = loader.load('textures/uranus.jpg');
 const uranusGeometry = new THREE.SphereGeometry(2.5, 64, 64);
 const uranusMaterial = new THREE.MeshStandardMaterial({ map: uranusTexture });
 const uranus = new THREE.Mesh(uranusGeometry, uranusMaterial);
-uranus.position.set(32, 0, 0);
+uranus.position.set(48, 0, 0);
 scene.add(uranus);
 
 // Uranus rings texture (put in your textures folder)
@@ -148,7 +162,7 @@ const neptuneTexture = loader.load('textures/neptune.jpg');
 const neptuneGeometry = new THREE.SphereGeometry(2.4, 64, 64);
 const neptuneMaterial = new THREE.MeshStandardMaterial({ map: neptuneTexture });
 const neptune = new THREE.Mesh(neptuneGeometry, neptuneMaterial);
-neptune.position.set(38, 0, 0);
+neptune.position.set(57, 0, 0);
 scene.add(neptune);
 
 // Pivots for revolution
@@ -227,14 +241,14 @@ function createOrbitLine(radius) {
   const material = new THREE.LineBasicMaterial({ color: 0x888888 });
   return new THREE.LineLoop(geometry, material);
 }
-scene.add(createOrbitLine(6));    // Mercury
-scene.add(createOrbitLine(8.5));  // Venus
-scene.add(createOrbitLine(11));   // Earth
-scene.add(createOrbitLine(14));   // Mars
-scene.add(createOrbitLine(20));   // Jupiter
-scene.add(createOrbitLine(26));   // Saturn
-scene.add(createOrbitLine(32));   // Uranus
-scene.add(createOrbitLine(38));   // Neptune
+scene.add(createOrbitLine(9));    // Mercury
+scene.add(createOrbitLine(12.75));  // Venus
+scene.add(createOrbitLine(16.5));   // Earth
+scene.add(createOrbitLine(21));   // Mars
+scene.add(createOrbitLine(30));   // Jupiter
+scene.add(createOrbitLine(39));   // Saturn
+scene.add(createOrbitLine(48));   // Uranus
+scene.add(createOrbitLine(57));   // Neptune
 
 
 animate();
