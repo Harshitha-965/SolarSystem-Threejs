@@ -45,7 +45,7 @@ const mercuryMaterial = new THREE.MeshStandardMaterial({
 
 // Mercury mesh
 const mercury = new THREE.Mesh(mercuryGeometry, mercuryMaterial);
-mercury.position.set(7, 0, 0);  // closer to sun than Earth (Earth is at 12)
+mercury.position.set(6, 0, 0);  // closer to sun than Earth (Earth is at 12)
 scene.add(mercury);
 
 //Venus
@@ -53,7 +53,7 @@ const venusTexture = loader.load('textures/venus.jpg');
 const venusGeometry = new THREE.SphereGeometry(1.5, 64, 64);
 const venusMaterial = new THREE.MeshStandardMaterial({ map: venusTexture });
 const venus = new THREE.Mesh(venusGeometry, venusMaterial);
-venus.position.set(9, 0, 0);
+venus.position.set(8.5, 0, 0);
 scene.add(venus);
 
 // Load Earth texture (day map)
@@ -67,7 +67,7 @@ const earthMaterial = new THREE.MeshStandardMaterial({
 
 // Earth mesh
 const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-earth.position.set(12, 0, 0);
+earth.position.set(11, 0, 0);
 scene.add(earth);
 
 //Mars
@@ -75,7 +75,7 @@ const marsTexture = loader.load('textures/mars.jpg');
 const marsGeometry = new THREE.SphereGeometry(1.2, 64, 64);
 const marsMaterial = new THREE.MeshStandardMaterial({ map: marsTexture });
 const mars = new THREE.Mesh(marsGeometry, marsMaterial);
-mars.position.set(15, 0, 0);
+mars.position.set(14, 0, 0);
 scene.add(mars);
 
 //Jupiter
@@ -83,7 +83,7 @@ const jupiterTexture = loader.load('textures/jupiter.jpg');
 const jupiterGeometry = new THREE.SphereGeometry(3.5, 64, 64);
 const jupiterMaterial = new THREE.MeshStandardMaterial({ map: jupiterTexture });
 const jupiter = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
-jupiter.position.set(22, 0, 0);
+jupiter.position.set(20, 0, 0);
 scene.add(jupiter);
 
 //Saturn
@@ -91,7 +91,7 @@ const saturnTexture = loader.load('textures/saturn.jpg');
 const saturnGeometry = new THREE.SphereGeometry(3, 64, 64);
 const saturnMaterial = new THREE.MeshStandardMaterial({ map: saturnTexture });
 const saturn = new THREE.Mesh(saturnGeometry, saturnMaterial);
-saturn.position.set(28, 0, 0);
+saturn.position.set(26, 0, 0);
 scene.add(saturn);
 
 // Saturn rings texture (put in your textures folder)
@@ -113,17 +113,15 @@ const saturnRing = new THREE.Mesh(ringGeometry, ringMaterial);
 
 // Position rings around Saturn
 saturnRing.position.copy(saturn.position);
-saturnRing.rotation.x = Math.PI / 2.7; // tilt the rings a bit
-
+saturnRing.rotation.x = Math.PI / 2.1; // tilt the rings a bit
 scene.add(saturnRing);
-
 
 //Uranus
 const uranusTexture = loader.load('textures/uranus.jpg');
 const uranusGeometry = new THREE.SphereGeometry(2.5, 64, 64);
 const uranusMaterial = new THREE.MeshStandardMaterial({ map: uranusTexture });
 const uranus = new THREE.Mesh(uranusGeometry, uranusMaterial);
-uranus.position.set(34, 0, 0);
+uranus.position.set(32, 0, 0);
 scene.add(uranus);
 
 // Uranus rings texture (put in your textures folder)
@@ -140,7 +138,7 @@ const uranusRingMaterial = new THREE.MeshBasicMaterial({
 
 const uranusRing = new THREE.Mesh(uranusRingGeometry, uranusRingMaterial);
 uranusRing.position.copy(uranus.position);
-uranusRing.rotation.x = Math.PI / 2.7;
+uranusRing.rotation.x = Math.PI / 2.1;
 
 scene.add(uranusRing);
 
@@ -150,26 +148,93 @@ const neptuneTexture = loader.load('textures/neptune.jpg');
 const neptuneGeometry = new THREE.SphereGeometry(2.4, 64, 64);
 const neptuneMaterial = new THREE.MeshStandardMaterial({ map: neptuneTexture });
 const neptune = new THREE.Mesh(neptuneGeometry, neptuneMaterial);
-neptune.position.set(40, 0, 0);
+neptune.position.set(38, 0, 0);
 scene.add(neptune);
 
+// Pivots for revolution
+const mercuryOrbit = new THREE.Object3D();
+const venusOrbit = new THREE.Object3D();
+const earthOrbit = new THREE.Object3D();
+const marsOrbit = new THREE.Object3D();
+const jupiterOrbit = new THREE.Object3D();
+const saturnOrbit = new THREE.Object3D();
+const uranusOrbit = new THREE.Object3D();
+const neptuneOrbit = new THREE.Object3D();
+
+// Add planets to their orbits
+mercuryOrbit.add(mercury);
+venusOrbit.add(venus);
+earthOrbit.add(earth);
+marsOrbit.add(mars);
+jupiterOrbit.add(jupiter);
+saturnOrbit.add(saturn);
+uranusOrbit.add(uranus);
+neptuneOrbit.add(neptune);
+
+// Add rings to Saturn/Uranus orbits
+saturnOrbit.add(saturnRing);
+uranusOrbit.add(uranusRing);
+
+// Add all orbits to scene
+scene.add(
+  mercuryOrbit,
+  venusOrbit,
+  earthOrbit,
+  marsOrbit,
+  jupiterOrbit,
+  saturnOrbit,
+  uranusOrbit,
+  neptuneOrbit
+);
 
 
 // === Animation ===
 function animate() {
   requestAnimationFrame(animate);
 
-  sun.rotation.y += 0.01;
-  mercury.rotation.y += 0.01; 
-  venus.rotation.y += 0.01;   
-  earth.rotation.y += 0.01;
-  mars.rotation.y += 0.01;
-  jupiter.rotation.y += 0.01;
-  saturn.rotation.y += 0.01;
-  uranus.rotation.y += 0.01;
-  neptune.rotation.y += 0.01;
+  sun.rotation.y += 0.002;
+  mercury.rotation.y += 0.02;   // Fast
+  venus.rotation.y += 0.002;    // Very slow (retrograde)
+  earth.rotation.y += 0.01;     // Normal
+  mars.rotation.y += 0.01;      // Similar to Earth
+  jupiter.rotation.y += 0.03;   // Fastest spinner
+  saturn.rotation.y += 0.025;   // Very fast
+  uranus.rotation.y += 0.018;   // Moderate (retrograde but keep it simple)
+  neptune.rotation.y += 0.017;  // Moderate
+
+
+  mercuryOrbit.rotation.y += 0.04;
+  venusOrbit.rotation.y += 0.015;
+  earthOrbit.rotation.y += 0.01;
+  marsOrbit.rotation.y += 0.008;
+  jupiterOrbit.rotation.y += 0.004;
+  saturnOrbit.rotation.y += 0.003;
+  uranusOrbit.rotation.y += 0.002;
+  neptuneOrbit.rotation.y += 0.001;
 
   renderer.render(scene, camera);
 }
+function createOrbitLine(radius) {
+  const points = [];
+  const segments = 128;
+
+  for (let i = 0; i <= segments; i++) {
+    const theta = (i / segments) * Math.PI * 2;
+    points.push(new THREE.Vector3(Math.cos(theta) * radius, 0, Math.sin(theta) * radius));
+  }
+
+  const geometry = new THREE.BufferGeometry().setFromPoints(points);
+  const material = new THREE.LineBasicMaterial({ color: 0x888888 });
+  return new THREE.LineLoop(geometry, material);
+}
+scene.add(createOrbitLine(6));    // Mercury
+scene.add(createOrbitLine(8.5));  // Venus
+scene.add(createOrbitLine(11));   // Earth
+scene.add(createOrbitLine(14));   // Mars
+scene.add(createOrbitLine(20));   // Jupiter
+scene.add(createOrbitLine(26));   // Saturn
+scene.add(createOrbitLine(32));   // Uranus
+scene.add(createOrbitLine(38));   // Neptune
+
 
 animate();
