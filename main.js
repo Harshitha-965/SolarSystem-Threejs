@@ -175,6 +175,44 @@ const saturnOrbit = new THREE.Object3D();
 const uranusOrbit = new THREE.Object3D();
 const neptuneOrbit = new THREE.Object3D();
 
+// Orbit speed values (initially set to match original values)
+const orbitSpeeds = {
+  mercury: 0.04,
+  venus: 0.015,
+  earth: 0.01,
+  mars: 0.008,
+  jupiter: 0.004,
+  saturn: 0.003,
+  uranus: 0.002,
+  neptune: 0.001
+};
+
+// Add event listeners to sliders
+document.getElementById("mercurySlider").addEventListener("input", (e) => {
+  orbitSpeeds.mercury = parseFloat(e.target.value);
+});
+document.getElementById("venusSlider").addEventListener("input", (e) => {
+  orbitSpeeds.venus = parseFloat(e.target.value);
+});
+document.getElementById("earthSlider").addEventListener("input", (e) => {
+  orbitSpeeds.earth = parseFloat(e.target.value);
+});
+document.getElementById("marsSlider").addEventListener("input", (e) => {
+  orbitSpeeds.mars = parseFloat(e.target.value);
+});
+document.getElementById("jupiterSlider").addEventListener("input", (e) => {
+  orbitSpeeds.jupiter = parseFloat(e.target.value);
+});
+document.getElementById("saturnSlider").addEventListener("input", (e) => {
+  orbitSpeeds.saturn = parseFloat(e.target.value);
+});
+document.getElementById("uranusSlider").addEventListener("input", (e) => {
+  orbitSpeeds.uranus = parseFloat(e.target.value);
+});
+document.getElementById("neptuneSlider").addEventListener("input", (e) => {
+  orbitSpeeds.neptune = parseFloat(e.target.value);
+});
+
 // Add planets to their orbits
 mercuryOrbit.add(mercury);
 venusOrbit.add(venus);
@@ -200,34 +238,63 @@ scene.add(
   uranusOrbit,
   neptuneOrbit
 );
+let isPaused = false;
+let animationId;
+
+document.getElementById("toggleSidebar").addEventListener("click", () => {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.classList.toggle("open");
+});
+
+document.getElementById("pauseResume").addEventListener("click", () => {
+  isPaused = !isPaused;
+
+  const btn = document.getElementById("pauseResume");
+  if (isPaused) {
+    btn.textContent = "▶️ Resume";
+    cancelAnimationFrame(animationId); // Stop animation loop
+  } else {
+    btn.textContent = "⏸️ Pause";
+    animate(); // Restart animation loop
+  }
+});
 
 
-// === Animation ===
+
 function animate() {
-  requestAnimationFrame(animate);
+  animationId = requestAnimationFrame(animate);
 
-  sun.rotation.y += 0.002;
-  mercury.rotation.y += 0.02;   // Fast
-  venus.rotation.y += 0.002;    // Very slow (retrograde)
-  earth.rotation.y += 0.01;     // Normal
-  mars.rotation.y += 0.01;      // Similar to Earth
-  jupiter.rotation.y += 0.03;   // Fastest spinner
-  saturn.rotation.y += 0.025;   // Very fast
-  uranus.rotation.y += 0.018;   // Moderate (retrograde but keep it simple)
-  neptune.rotation.y += 0.017;  // Moderate
+  if (!isPaused) {
+    // Rotation
+    sun.rotation.y += 0.002;
+    mercury.rotation.y += 0.02;
+    venus.rotation.y += 0.002;
+    earth.rotation.y += 0.01;
+    mars.rotation.y += 0.01;
+    jupiter.rotation.y += 0.03;
+    saturn.rotation.y += 0.025;
+    uranus.rotation.y += 0.018;
+    neptune.rotation.y += 0.017;
 
+    // Revolution
+    mercuryOrbit.rotation.y += orbitSpeeds.mercury;
+    venusOrbit.rotation.y += orbitSpeeds.venus;
+    earthOrbit.rotation.y += orbitSpeeds.earth;
+    marsOrbit.rotation.y += orbitSpeeds.mars;
+    jupiterOrbit.rotation.y += orbitSpeeds.jupiter;
+    saturnOrbit.rotation.y += orbitSpeeds.saturn;
+    uranusOrbit.rotation.y += orbitSpeeds.uranus;
+    neptuneOrbit.rotation.y += orbitSpeeds.neptune;
 
-  mercuryOrbit.rotation.y += 0.04;
-  venusOrbit.rotation.y += 0.015;
-  earthOrbit.rotation.y += 0.01;
-  marsOrbit.rotation.y += 0.008;
-  jupiterOrbit.rotation.y += 0.004;
-  saturnOrbit.rotation.y += 0.003;
-  uranusOrbit.rotation.y += 0.002;
-  neptuneOrbit.rotation.y += 0.001;
+    controls.update();
+    renderer.render(scene, camera);
+  }
 
+  controls.update();
   renderer.render(scene, camera);
 }
+
+
 function createOrbitLine(radius) {
   const points = [];
   const segments = 128;
@@ -250,5 +317,30 @@ scene.add(createOrbitLine(39));   // Saturn
 scene.add(createOrbitLine(48));   // Uranus
 scene.add(createOrbitLine(57));   // Neptune
 
+function createStars() {
+  const starGeometry = new THREE.BufferGeometry();
+  const starCount = 1000;
+  const positions = [];
+
+  for (let i = 0; i < starCount; i++) {
+    positions.push(
+      (Math.random() - 0.5) * 1000,  // x
+      (Math.random() - 0.5) * 1000,  // y
+      (Math.random() - 0.5) * 1000   // z
+    );
+  }
+
+  starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+
+  const starMaterial = new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 0.7,
+  });
+
+  const stars = new THREE.Points(starGeometry, starMaterial);
+  scene.add(stars);
+}
+
+createStars();
 
 animate();

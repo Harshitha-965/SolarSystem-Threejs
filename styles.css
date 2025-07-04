@@ -9,3 +9,68 @@ canvas {
   width: 100vw;
   height: 100vh;
 }
+#sidebar {
+  position: fixed;
+  top: 50px;
+  right: -240px; /* hidden off-screen */
+  width: 220px;
+  height: 100%;
+  color: white;
+  padding: 15px;
+  z-index: 15;
+  transition: right 0.3s ease;
+}
+
+#sidebar.open {
+  right: 0; /* slide in */
+}
+
+#sidebar label {
+  display: block;
+  margin-top: 10px;
+}
+
+#sidebar input[type="range"] {
+  width: 100%;
+}
+
+/* #toggleSidebar {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 20;
+  background-color: #222;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+} */
+#topControls {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  flex-direction: row-reverse; /* 👈 Add this line */
+  gap: 10px;
+  z-index: 9999;
+}
+
+
+#topControls button {
+  background-color: #222;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#topControls button:hover {
+  background-color: #444;
+}
+
+
