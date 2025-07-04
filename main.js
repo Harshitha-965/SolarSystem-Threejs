@@ -238,6 +238,7 @@ scene.add(
   uranusOrbit,
   neptuneOrbit
 );
+
 let isPaused = false;
 let animationId;
 
@@ -340,7 +341,27 @@ function createStars() {
   const stars = new THREE.Points(starGeometry, starMaterial);
   scene.add(stars);
 }
+const themeBtn = document.getElementById("toggleTheme");
+document.body.classList.add("dark-mode");
+scene.background = new THREE.Color(0x000000);
+
+themeBtn.addEventListener("click", () => {
+  const body = document.body;
+
+  if (body.classList.contains("dark-mode")) {
+    body.classList.remove("dark-mode");
+    body.classList.add("light-mode");
+    themeBtn.textContent = "🌞"; // show moon for light mode
+    scene.background = new THREE.Color(0x000000); // light background
+  } else {
+    body.classList.remove("light-mode");
+    body.classList.add("dark-mode");
+    themeBtn.textContent = "🌙"; // show sun for dark mode
+    scene.background = new THREE.Color(0x000000); // dark background
+  }
+});
+
 
 createStars();
-
 animate();
+

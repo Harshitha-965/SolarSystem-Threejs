@@ -11,11 +11,11 @@ canvas {
 }
 #sidebar {
   position: fixed;
-  top: 50px;
-  right: -240px; /* hidden off-screen */
+  top: 75px;
+  right: -250px; /* hidden off-screen */
   width: 220px;
   height: 100%;
-  color: white;
+  color: rgb(234, 214, 214);
   padding: 15px;
   z-index: 15;
   transition: right 0.3s ease;
@@ -34,19 +34,6 @@ canvas {
   width: 100%;
 }
 
-/* #toggleSidebar {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 20;
-  background-color: #222;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-} */
 #topControls {
   position: fixed;
   top: 15px;
@@ -71,6 +58,31 @@ canvas {
 
 #topControls button:hover {
   background-color: #444;
+}
+
+body.dark-mode {
+  background-color: black;
+  color: white;
+}
+
+body.light-mode {
+  background-color: #eef1f5;
+  color: black;
+}
+
+body.light-mode canvas {
+  background-color: #eef1f5;
+}
+
+#sidebar,
+#topControls button {
+  transition: background 0.3s, color 0.3s;
+}
+
+body.light-mode #topControls button,
+body.light-mode #sidebar {
+  background-color: #ddd;
+  color: black;
 }
 
 
