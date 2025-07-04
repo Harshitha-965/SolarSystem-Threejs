@@ -17,16 +17,6 @@ renderer.physicallyCorrectLights = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
-// Orbit Controls 
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.enablePan = true;
-controls.enableZoom = true;
-controls.rotateSpeed = 0.8;
-controls.zoomSpeed = 1;
-controls.panSpeed = 0.5;
-
 // Lighting 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
 scene.add(ambientLight);
@@ -124,20 +114,6 @@ const orbitSpeeds = {
   });
 });
 
-// Sidebar & Pause
-let isPaused = false, animationId;
-
-document.getElementById("toggleSidebar").addEventListener("click", () => {
-  document.getElementById("sidebar").classList.toggle("open");
-});
-
-document.getElementById("pauseResume").addEventListener("click", () => {
-  isPaused = !isPaused;
-  const btn = document.getElementById("pauseResume");
-  btn.textContent = isPaused ? "▶️ Resume" : "⏸️ Pause";
-  if (!isPaused) animate();
-});
-
 // Animate
 function animate() {
   animationId = requestAnimationFrame(animate);
@@ -165,6 +141,39 @@ function animate() {
   renderer.render(scene, camera);
 }
 
+// Orbit Controls 
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.enablePan = true;
+controls.enableZoom = true;
+controls.rotateSpeed = 0.8;
+controls.zoomSpeed = 1;
+controls.panSpeed = 0.5;
+
+// Star Background 
+(function createStars() {
+  const geometry = new THREE.BufferGeometry();
+  const positions = Array.from({ length: 1000 }, () => (Math.random() - 0.5) * 1000);
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  const material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.7 });
+  scene.add(new THREE.Points(geometry, material));
+})();
+
+// Sidebar & Pause
+let isPaused = false, animationId;
+
+document.getElementById("toggleSidebar").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.toggle("open");
+});
+
+document.getElementById("pauseResume").addEventListener("click", () => {
+  isPaused = !isPaused;
+  const btn = document.getElementById("pauseResume");
+  btn.textContent = isPaused ? "▶️ Resume" : "⏸️ Pause";
+  if (!isPaused) animate();
+});
+
 // Orbit Paths
 [9, 12.75, 16.5, 21, 30, 39, 48, 57].forEach(r => {
   const points = Array.from({ length: 129 }, (_, i) => {
@@ -175,15 +184,6 @@ function animate() {
   const material = new THREE.LineBasicMaterial({ color: 0x888888 });
   scene.add(new THREE.LineLoop(geometry, material));
 });
-
-// Star Background 
-(function createStars() {
-  const geometry = new THREE.BufferGeometry();
-  const positions = Array.from({ length: 1000 }, () => (Math.random() - 0.5) * 1000);
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  const material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.7 });
-  scene.add(new THREE.Points(geometry, material));
-})();
 
 // Theme Toggle
 const themeBtn = document.getElementById("toggleTheme");
