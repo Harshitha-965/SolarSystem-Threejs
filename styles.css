@@ -12,7 +12,7 @@ canvas {
 #sidebar {
   position: fixed;
   top: 75px;
-  right: -250px; /* hidden off-screen */
+  right: -250px; 
   width: 220px;
   height: 100%;
   color: rgb(234, 214, 214);
@@ -22,7 +22,7 @@ canvas {
 }
 
 #sidebar.open {
-  right: 0; /* slide in */
+  right: 0;
 }
 
 #sidebar label {
@@ -39,7 +39,7 @@ canvas {
   top: 15px;
   right: 15px;
   display: flex;
-  flex-direction: row-reverse; /* 👈 Add this line */
+  flex-direction: row-reverse; 
   gap: 10px;
   z-index: 9999;
 }
