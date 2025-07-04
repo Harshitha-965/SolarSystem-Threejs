@@ -25,6 +25,6 @@ An interactive 3D solar system built using Three.js. This project visually demon
 3. Double Click index.html
 4. Open it in your preferred web browser.
 
-Author
+Author: 
 Harshitha KG
 @Harshitha-965
