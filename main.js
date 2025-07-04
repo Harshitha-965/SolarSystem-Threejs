@@ -361,7 +361,71 @@ themeBtn.addEventListener("click", () => {
   }
 });
 
-
 createStars();
+const tooltip = document.getElementById("planetTooltip");
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+// List of planets and their names
+const planets = [
+  { mesh: sun, name: "Sun"},
+  { mesh: mercury, name: "Mercury" },
+  { mesh: venus, name: "Venus" },
+  { mesh: earth, name: "Earth" },
+  { mesh: mars, name: "Mars" },
+  { mesh: jupiter, name: "Jupiter" },
+  { mesh: saturn, name: "Saturn" },
+  { mesh: uranus, name: "Uranus" },
+  { mesh: neptune, name: "Neptune" },
+];
+
+// Detect mouse move
+window.addEventListener("mousemove", (event) => {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+
+  const intersects = raycaster.intersectObjects(planets.map(p => p.mesh));
+
+  if (intersects.length > 0) {
+    const planet = planets.find(p => p.mesh === intersects[0].object);
+    tooltip.style.display = "block";
+    tooltip.textContent = planet.name;
+    tooltip.style.left = event.clientX + 10 + "px";
+    tooltip.style.top = event.clientY + 10 + "px";
+  } else {
+    tooltip.style.display = "none";
+  }
+});
+const pointer = new THREE.Vector2();
+const clickableObjects = [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
+window.addEventListener('click', (event) => {
+  // Convert mouse position to normalized device coordinates
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(clickableObjects);
+
+  if (intersects.length > 0) {
+    const planet = intersects[0].object;
+
+    // Move camera to zoom in
+    const targetPosition = planet.position.clone().add(new THREE.Vector3(5, 5, 5)); // Adjust offset for zoom distance
+
+    gsap.to(camera.position, {
+      x: targetPosition.x,
+      y: targetPosition.y,
+      z: targetPosition.z,
+      duration: 2,
+      onUpdate: () => controls.update()
+    });
+
+    // Make orbit controls look at the planet
+    controls.target.copy(planet.position);
+  }
+});
+
 animate();
 

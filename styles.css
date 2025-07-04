@@ -85,4 +85,17 @@ body.light-mode #sidebar {
   color: black;
 }
 
+.tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  font-size: 14px;
+  display: none;
+  z-index: 10000;
+  white-space: nowrap;
+}
+
 
