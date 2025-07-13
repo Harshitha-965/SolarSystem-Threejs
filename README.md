@@ -27,4 +27,5 @@ An interactive 3D solar system built using Three.js. This project visually demon
 
 Author: 
 Harshitha KG
-@Harshitha-965
+
+
