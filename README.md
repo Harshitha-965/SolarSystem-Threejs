@@ -22,7 +22,7 @@ An interactive 3D solar system built using Three.js. This project visually demon
 - [GSAP](https://greensock.com/gsap/)
 
 ▶️ How to Run
-
+```
 1. Clone the repository
 git clone https://github.com/harshitha-965/SolarSystem-Threejs.git
 
@@ -34,9 +34,9 @@ Simply open index.html in your browser
 (or)
 Use Live Server (recommended for better performance)
 4. Start exploring the solar system 🚀
-
+```
 Author: 
-Harshitha KG
-harshithakg09@gmail.com
+- Harshitha KG
+- harshithakg09@gmail.com
 
 
